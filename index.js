@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 app.use(cors());
 app.use(express.json());
@@ -43,7 +43,7 @@ async function run() {
      await client.connect();
       const database = client.db("GoExplorDB");
    const servicesCollection = database.collection("allServices");
-
+// all service 
    app.post('/allServices', async(req, res) => {
     const services = req.body;
     console.log('new services', services);
@@ -51,6 +51,15 @@ async function run() {
     res.send(result);
 
    })
+
+  //  singe service
+  app.get("/singleService/:id", async(req, res) => {
+    const id = req.params.id;
+    const query = {_id : new ObjectId(id)};
+    const result = await servicesCollection.findOne(query);
+    res.send(result);
+  })
+
 
    app.get('/allServices', async(req, res) => {
     const cursor = servicesCollection.find();
