@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 
-console.log(" your use name : ",process.env.DB_USER);
+
 
 // const uri = "mongodb+srv://<username>:<password>@cluster0.haioro2.mongodb.net/?retryWrites=true&w=majority";
  const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.haioro2.mongodb.net/?retryWrites=true&w=majority`;
@@ -40,7 +40,26 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
+     await client.connect();
+      const database = client.db("GoExplorDB");
+   const servicesCollection = database.collection("allServices");
+
+   app.post('/allServices', async(req, res) => {
+    const services = req.body;
+    console.log('new services', services);
+    const result = await servicesCollection.insertOne(services);
+    res.send(result);
+
+   })
+
+   app.get('/allServices', async(req, res) => {
+    const cursor = servicesCollection.find();
+    const results = await cursor.toArray();
+    res.send(results);
+
+   } )
+
+     
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
