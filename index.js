@@ -43,7 +43,8 @@ async function run() {
      await client.connect();
       const database = client.db("GoExplorDB");
    const servicesCollection = database.collection("allServices");
-// all service 
+   const bookingCollection = database.collection("booking");
+// all service post 
    app.post('/allServices', async(req, res) => {
     const services = req.body;
     console.log('new services', services);
@@ -53,20 +54,30 @@ async function run() {
    })
 
   //  singe service
-  app.get("/singleService/:id", async(req, res) => {
+  app.get("/allServices/:id", async(req, res) => {
     const id = req.params.id;
     const query = {_id : new ObjectId(id)};
     const result = await servicesCollection.findOne(query);
     res.send(result);
   })
 
-
+/////// all data server to client site
    app.get('/allServices', async(req, res) => {
     const cursor = servicesCollection.find();
     const results = await cursor.toArray();
     res.send(results);
 
    } )
+
+
+   //// booking data post server site 
+   app.post('/booking', async(req, res) => {
+    const booking = req.body;
+    console.log(booking);
+    const result = await bookingCollection.insertOne(booking);
+    res.send(result);
+
+   })
 
      
     // Send a ping to confirm a successful connection
