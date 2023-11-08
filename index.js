@@ -15,18 +15,7 @@ app.use(express.json());
  const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.haioro2.mongodb.net/?retryWrites=true&w=majority`;
 
 
-// const database = client.db("ServicesDB");
-//     const userCollection = database.collection("allServices");
 
-
-    // app.post('/users', async(req, res) => {
-    //     const user = req.body;
-    //     console.log('new user', user);
-    //     const result = await userCollection.insertOne(user);
-    //     res.send(result);
-
-
-    // })
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -70,7 +59,7 @@ async function run() {
    } )
 
 
-   //// booking data post server site 
+   //// booking data post client to server site 
    app.post('/booking', async(req, res) => {
     const booking = req.body;
     console.log(booking);
@@ -78,6 +67,26 @@ async function run() {
     res.send(result);
 
    })
+
+   ///// email wise data 
+   app.get('/bookings' , async(req, res) => {
+    
+    
+    let query = {};
+    if(req.query.email)
+    {
+      query = {
+        email : req.query.email ,
+      }
+    }
+    console.log("query", query);
+    const cursor = bookingCollection.find(query);
+    const results = await cursor.toArray();
+    res.send(results);
+    
+
+   })
+
 
      
     // Send a ping to confirm a successful connection
