@@ -58,6 +58,32 @@ async function run() {
 
    } )
 
+   /// update data in client to server
+
+   app.put('/allServices/:id', async(req, res) => {
+    const id = req.params.id;
+    const updateService = req.body;
+    console.log(id, updateService);
+    const filter = { _id : new ObjectId(id) };
+    const options = {upsert : true}
+    const updated = {
+      $set:{
+        serviceName : updateService.serviceName ,
+        pictureURL : updateService.pictureURL ,
+        yourName : updateService.yourName ,
+        yourEmail : updateService.yourEmail,
+        Price : updateService.Price,
+        description: updateService.description ,
+        serviceArea : updateService.serviceArea,
+        ServiceProviderImage : updateService.ServiceProviderImage,
+      }
+    }
+
+    const result = await servicesCollection.updateOne(filter, updated, options)
+    res.send(result);
+
+   } )
+
    /// delate data client to server site 
 
    app.delete('/allServices/:id', async(req, res) => {
@@ -67,6 +93,8 @@ async function run() {
     const result = await servicesCollection.deleteOne(query);
     res.send(result);
    } )
+
+
 
 
 
