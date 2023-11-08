@@ -58,6 +58,17 @@ async function run() {
 
    } )
 
+   /// delate data client to server site 
+
+   app.delete('/allServices/:id', async(req, res) => {
+    const id = req.params.id;
+    console.log('data base delate id is : ', id);
+    const query = { _id: new ObjectId(id)};
+    const result = await servicesCollection.deleteOne(query);
+    res.send(result);
+   } )
+
+
 
    //// booking data post client to server site 
    app.post('/booking', async(req, res) => {
