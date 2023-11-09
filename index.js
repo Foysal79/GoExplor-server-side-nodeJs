@@ -49,6 +49,39 @@ async function run() {
     const result = await servicesCollection.findOne(query);
     res.send(result);
   })
+    //// my services page client to database
+
+    app.get("/allServicesUserWise/:email", async(req, res) => {
+      const id = req.params.email;
+      const query = { 
+      
+        yourEmail : id,
+
+      }
+      const cursor = servicesCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+       
+    } )
+
+    // app.get('/bookings' , async(req, res) => {
+    
+    
+    //   let query = {};
+    //   if(req.query.email)
+    //   {
+    //     query = {
+    //       email : req.query.email ,
+    //     }
+    //   }
+    //   console.log("query", query);
+    //   const cursor = bookingCollection.find(query);
+    //   const results = await cursor.toArray();
+    //   res.send(results);
+      
+  
+    //  })
+  
 
 /////// all data server to client site
    app.get('/allServices', async(req, res) => {
@@ -84,6 +117,10 @@ async function run() {
 
    } )
 
+ 
+
+
+
    /// delate data client to server site 
 
    app.delete('/allServices/:id', async(req, res) => {
@@ -95,6 +132,14 @@ async function run() {
    } )
 
 
+  //  //// booking data post client to server site 
+  //  app.post('/booking', async(req, res) => {
+  //   const booking = req.body;
+  //   console.log(booking);
+  //   const result = await bookingCollection.insertOne(booking);
+  //   res.send(result);
+
+  //  })
 
 
 
@@ -106,6 +151,35 @@ async function run() {
     res.send(result);
 
    })
+   /// booking all data 
+
+   app.get('/bookingsAllData', async(req, res) => {
+    const cursor = bookingCollection.find();
+    const result = await cursor.toArray();
+    res.send(result);
+   })
+
+
+ //// bookin status data update
+
+ app.patch('/bookingsAllData/:id', async(req, res) => {
+  const id = req.params.id;
+  const filter = {_id : new ObjectId(id)};
+  const updatedBooking = req.body;
+  console.log(updatedBooking);
+  const updateDoc = {
+    $set: {
+      status : updatedBooking.status,
+    }
+  }
+  const result = await bookingCollection.updateOne(filter, updateDoc);
+  res.send(result);
+
+
+
+ } )
+  
+
 
    ///// email wise data 
    app.get('/bookings' , async(req, res) => {
@@ -125,6 +199,8 @@ async function run() {
     
 
    })
+
+   
 
 
      
