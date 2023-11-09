@@ -42,6 +42,8 @@ async function run() {
 
    })
 
+
+
   //  singe service
   app.get("/allServices/:id", async(req, res) => {
     const id = req.params.id;
@@ -63,6 +65,21 @@ async function run() {
       res.send(result);
        
     } )
+
+    /// relative data 
+
+    app.get("/allServiceRelativeData/:email", async(req, res) => {
+      const id = req.params.email;
+      const query = { 
+      
+        yourEmail : id,
+
+      }
+      const cursor = servicesCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+
+    })
 
     // app.get('/bookings' , async(req, res) => {
     
@@ -132,14 +149,7 @@ async function run() {
    } )
 
 
-  //  //// booking data post client to server site 
-  //  app.post('/booking', async(req, res) => {
-  //   const booking = req.body;
-  //   console.log(booking);
-  //   const result = await bookingCollection.insertOne(booking);
-  //   res.send(result);
-
-  //  })
+  
 
 
 
@@ -178,6 +188,9 @@ async function run() {
 
 
  } )
+
+
+
   
 
 
